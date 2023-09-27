@@ -1638,7 +1638,7 @@ function RayfieldLibrary:CreateWindow(Settings)
 			Input.Title.Text = InputSettings.Name
 			Input.Visible = true
 			Input.Parent = TabPage
-
+			
 			Input.BackgroundTransparency = 1
 			Input.UIStroke.Transparency = 1
 			Input.Title.TextTransparency = 1
@@ -1654,8 +1654,6 @@ function RayfieldLibrary:CreateWindow(Settings)
 			Input.InputFrame.Size = UDim2.new(0, Input.InputFrame.InputBox.TextBounds.X + 24, 0, 30)
 
 			Input.InputFrame.InputBox.FocusLost:Connect(function()
-
-
 				local Success, Response = pcall(function()
 					InputSettings.Callback(Input.InputFrame.InputBox.Text)
 				end)
@@ -1684,8 +1682,23 @@ function RayfieldLibrary:CreateWindow(Settings)
 				TweenService:Create(Input, TweenInfo.new(0.6, Enum.EasingStyle.Quint), {BackgroundColor3 = SelectedTheme.ElementBackground}):Play()
 			end)
 
+			local IntegersOnly = InputSettings.IntegersOnly
+			local CurrText = Input.InputFrame.InputBox.Text
+			
 			Input.InputFrame.InputBox:GetPropertyChangedSignal("Text"):Connect(function()
 				TweenService:Create(Input.InputFrame, TweenInfo.new(0.55, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, Input.InputFrame.InputBox.TextBounds.X + 24, 0, 30)}):Play()
+
+				if IntegersOnly then
+					if string.find(Input.InputFrame.InputBox.Text, ".") then
+						Input.InputFrame.InputBox.Text = CurrText
+					elseif tonumber(Input.InputFrame.InputBox.Text) then
+						-- do nothing
+					else
+						Input.InputFrame.InputBox.Text = CurrText
+					end
+				end
+
+				CurrText = Input.InputFrame.InputBox.Text
 			end)
 
 			local InputSettings = {}
@@ -1693,11 +1706,11 @@ function RayfieldLibrary:CreateWindow(Settings)
 				Input.InputFrame.InputBox.Text = text
 			end
 
-			function InputSettings:SetText(text) --Doesnt fire the event
+			function InputSettings:SetValue(text) --Doesnt fire the event
 				Input.InputFrame.InputBox.Text = text
 			end
 
-			function InputSettings:GetText()
+			function InputSettings:GetValue()
 				return Input.InputFrame.InputBox.Text
 			end
 			return InputSettings
