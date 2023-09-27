@@ -1693,6 +1693,7 @@ function RayfieldLibrary:CreateWindow(Settings)
 			Input.InputFrame.InputBox:GetPropertyChangedSignal("Text"):Connect(function()
 				TweenService:Create(Input.InputFrame, TweenInfo.new(0.55, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, Input.InputFrame.InputBox.TextBounds.X + 24, 0, 30)}):Play()
 
+				--[[
 				if IntegersOnly then
 					if string.find(Input.InputFrame.InputBox.Text, ".") then
 						Input.InputFrame.InputBox.Text = CurrText
@@ -1711,6 +1712,7 @@ function RayfieldLibrary:CreateWindow(Settings)
 				end
 
 				CurrText = Input.InputFrame.InputBox.Text
+					]]
 			end)
 
 			local InputSettings = {}
