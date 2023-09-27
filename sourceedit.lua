@@ -1683,7 +1683,12 @@ function RayfieldLibrary:CreateWindow(Settings)
 			end)
 
 			local IntegersOnly = InputSettings.IntegersOnly
+			local NumbersOnly = InputSettings.NumbersOnly
 			local CurrText = Input.InputFrame.InputBox.Text
+
+			if IntegersOnly and NumbersOnly then
+				NumbersOnly = false
+			end
 			
 			Input.InputFrame.InputBox:GetPropertyChangedSignal("Text"):Connect(function()
 				TweenService:Create(Input.InputFrame, TweenInfo.new(0.55, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, Input.InputFrame.InputBox.TextBounds.X + 24, 0, 30)}):Play()
@@ -1693,6 +1698,13 @@ function RayfieldLibrary:CreateWindow(Settings)
 						Input.InputFrame.InputBox.Text = CurrText
 					elseif tonumber(Input.InputFrame.InputBox.Text) then
 						-- do nothing
+					else
+						Input.InputFrame.InputBox.Text = CurrText
+					end
+				end
+
+				if NumbersOnly then
+					if tonumber(Input.InputFrame.InputBox.Text) then
 					else
 						Input.InputFrame.InputBox.Text = CurrText
 					end
